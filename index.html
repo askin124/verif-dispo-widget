@@ -279,19 +279,25 @@ async function chargerDisponibilites() {
     });
 
     const json = await resp.json();
+    console.log('RAW response:', JSON.stringify(json));
     let data = null;
 
-    // La réponse Zoho Functions est dans details.output
     try {
-      const output = json.details && json.details.output ? json.details.output : json;
+      // Zoho Functions REST API retourne dans details.output ou code.details.output
+      let output = null;
+      if (json.details && json.details.output)        output = json.details.output;
+      else if (json.code && json.code.details && json.code.details.output) output = json.code.details.output;
+      else if (json.output)                           output = json.output;
+      else                                            output = json;
+
       data = typeof output === 'string' ? JSON.parse(output) : output;
     } catch(e) {
-      showError('Réponse invalide de la fonction. Vérifiez la fonction verif_dispo.');
+      showError('Réponse invalide : ' + JSON.stringify(json).substring(0, 200));
       return;
     }
 
     if (!data || data.status !== 'ok') {
-      showError(data ? data.message : 'Erreur inconnue.');
+      showError((data && data.message) ? data.message : 'Erreur : ' + JSON.stringify(data).substring(0, 200));
       return;
     }
 
