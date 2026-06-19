@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Connexion…</title>
+<style>
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    display: flex; align-items: center; justify-content: center;
+    min-height: 100vh; background: #f8fafc; color: #1e293b;
+  }
+  .box { text-align: center; }
+  .spinner {
+    width: 40px; height: 40px; margin: 0 auto 16px;
+    border: 3px solid #e2e8f0; border-top-color: #16a34a;
+    border-radius: 50%; animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  p { font-size: 14px; color: #64748b; }
+  .error { color: #dc2626; margin-top: 12px; font-size: 13px; }
+</style>
+</head>
+<body>
+<div class="box">
+  <div class="spinner"></div>
+  <p>Connexion à Zoho en cours…</p>
+  <div class="error" id="err"></div>
+</div>
+
+<script>
+const CLIENT_ID     = '1000.IRJKC296RUZ56JY941JJUFI5V8H6GG';
+const CLIENT_SECRET = '9e4ac863315d7cf7816d0251c294a17ef3868f2a4d';
+const REDIRECT_URI  = 'https://askin124.github.io/verif-dispo-widget/callback.html';
+
+async function handleCallback() {
+  const params = new URLSearchParams(window.location.search);
+  const code   = params.get('code');
+  const error  = params.get('error');
+
+  if (error || !code) {
+    document.getElementById('err').textContent = 'Erreur OAuth : ' + (error || 'code manquant');
+    return;
+  }
+
+  // Échanger le code contre un access token
+  // Note: l'échange code → token doit normalement se faire côté serveur
+  // Ici on utilise un proxy CORS ou l'API Zoho directement
+  try {
+    const resp = await fetch('https://accounts.zoho.eu/oauth/v2/token', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({
+        code:          code,
+        client_id:     CLIENT_ID,
+        client_secret: CLIENT_SECRET,
+        redirect_uri:  REDIRECT_URI,
+        grant_type:    'authorization_code'
+      })
+    });
+
+    const data = await resp.json();
+
+    if (data.access_token) {
+      // Stocker le token
+      localStorage.setItem('zoho_access_token', data.access_token);
+      // Expiry : 1h
+      localStorage.setItem('zoho_token_expiry', Date.now() + 3600 * 1000);
+
+      // Récupérer le lead_id sauvegardé avant le login
+      const leadId = localStorage.getItem('pending_lead_id') || '';
+      localStorage.removeItem('pending_lead_id');
+
+      // Rediriger vers le widget principal
+      window.location.href = 'https://askin124.github.io/verif-dispo-widget/?lead_id=' + leadId;
+    } else {
+      document.getElementById('err').textContent =
+        'Erreur token : ' + (data.error || JSON.stringify(data));
+    }
+  } catch(e) {
+    document.getElementById('err').textContent = 'Erreur réseau : ' + e.message;
+  }
+}
+
+handleCallback();
+</script>
+</body>
+</html>
