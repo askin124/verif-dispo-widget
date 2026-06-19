@@ -277,7 +277,7 @@ async function getAccessToken() {
 // ── APPEL FONCTION DELUGE ────────────────────────────────────────
 async function chargerDisponibilites() {
   try {
-    const resp = await fetch(ZOHO_BASE + '/functions/verif_dispo/actions/execute?auth_type=oauth', {
+    const resp = await fetch(ZOHO_BASE + '/functions/verid_dispo/actions/execute?auth_type=oauth', {
       method: 'POST',
       headers: {
         'Authorization': 'Zoho-oauthtoken ' + accessToken,
