@@ -252,7 +252,8 @@ async function getAccessToken() {
   try {
     const resp = await fetch(TOKEN_PROXY, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' }
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'token' })
     });
     const data = await resp.json();
     if (data.access_token) {
@@ -271,10 +272,10 @@ async function getAccessToken() {
 // ── APPEL FONCTION DELUGE ────────────────────────────────────────
 async function chargerDisponibilites() {
   try {
-    const resp = await fetch(TOKEN_PROXY + '/function', {
+    const resp = await fetch(TOKEN_PROXY, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ access_token: accessToken, lead_id: leadId })
+      body: JSON.stringify({ action: 'function', access_token: accessToken, lead_id: leadId })
     });
 
     const json = await resp.json();
@@ -423,10 +424,10 @@ async function validerCreneau() {
   document.getElementById('btn-valider').textContent = 'Enregistrement…';
 
   try {
-    const resp = await fetch(TOKEN_PROXY + '/update', {
+    const resp = await fetch(TOKEN_PROXY, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ access_token: accessToken, lead_id: leadId, date: selectedDate, heure: selectedHeure })
+      body: JSON.stringify({ action: 'update', access_token: accessToken, lead_id: leadId, date: selectedDate, heure: selectedHeure })
     });
 
     const json = await resp.json();
