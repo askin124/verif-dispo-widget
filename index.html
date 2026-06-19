@@ -208,7 +208,7 @@ const CLIENT_ID     = '1000.2Z0UCDAXA9XLS30MHACJMSQAUH5EUJ';
 const CLIENT_SECRET = '6e68128e56497ff70c4063a7fa1b862cee13db2c10';
 const REFRESH_TOKEN = '1000.d1a6ca691c6d1139527925c7ea009121.eb3a6b2b61656d8bd816c4a51a5e88c8';
 const ZOHO_BASE     = 'https://www.zohoapis.eu/crm/v8';
-const ZOHO_ACCOUNTS = 'https://accounts.zoho.eu';
+const TOKEN_PROXY   = 'https://zoho-token-proxy.olivierdubost.workers.dev';
 
 let leadId        = null;
 let accessToken   = null;
@@ -250,15 +250,9 @@ async function getAccessToken() {
   if (cached && Date.now() < expiry) return cached;
 
   try {
-    const resp = await fetch(ZOHO_ACCOUNTS + '/oauth/v2/token', {
+    const resp = await fetch(TOKEN_PROXY, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: new URLSearchParams({
-        refresh_token: REFRESH_TOKEN,
-        client_id:     CLIENT_ID,
-        client_secret: CLIENT_SECRET,
-        grant_type:    'refresh_token'
-      })
+      headers: { 'Content-Type': 'application/json' }
     });
     const data = await resp.json();
     if (data.access_token) {
@@ -277,7 +271,7 @@ async function getAccessToken() {
 // ── APPEL FONCTION DELUGE ────────────────────────────────────────
 async function chargerDisponibilites() {
   try {
-    const resp = await fetch(ZOHO_BASE + '/functions/verid_dispo/actions/execute?auth_type=oauth', {
+    const resp = await fetch(ZOHO_BASE + '/functions/verif_dispo/actions/execute?auth_type=oauth', {
       method: 'POST',
       headers: {
         'Authorization': 'Zoho-oauthtoken ' + accessToken,
