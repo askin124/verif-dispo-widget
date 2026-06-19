@@ -204,10 +204,11 @@
 </div>
 
 <script>
-const CLIENT_ID     = '1000.IRJKC296RUZ56JY941JJUFI5V8H6GG';
-const REDIRECT_URI  = 'https://askin124.github.io/verif-dispo-widget/callback.html';
+const CLIENT_ID     = '1000.2Z0UCDAXA9XLS30MHACJMSQAUH5EUJ';
+const CLIENT_SECRET = '6e68128e56497ff70c4063a7fa1b862cee13db2c10';
+const REFRESH_TOKEN = '1000.d1a6ca691c6d1139527925c7ea009121.eb3a6b2b61656d8bd816c4a51a5e88c8';
 const ZOHO_BASE     = 'https://www.zohoapis.eu/crm/v8';
-const SCOPE         = 'ZohoCRM.modules.leads.UPDATE,ZohoCRM.functions.execute.CREATE';
+const ZOHO_ACCOUNTS = 'https://accounts.zoho.eu';
 
 let leadId        = null;
 let accessToken   = null;
@@ -222,39 +223,56 @@ const MOIS_FR = ['janvier','février','mars','avril','mai','juin','juillet','ao�
 const JOURS_FR = ['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'];
 
 // ── INIT ────────────────────────────────────────────────────────
-window.onload = function() {
-  // Récupérer lead_id depuis URL
+window.onload = async function() {
   const params = new URLSearchParams(window.location.search);
   leadId = params.get('lead_id');
-
-  // Récupérer access token depuis localStorage (stocké par callback.html)
-  accessToken = localStorage.getItem('zoho_access_token');
-  const tokenExpiry = localStorage.getItem('zoho_token_expiry');
 
   if (!leadId) {
     showError('Aucun lead_id fourni. Ouvrez ce widget depuis un lead Zoho CRM.');
     return;
   }
 
-  if (!accessToken || Date.now() > parseInt(tokenExpiry || 0)) {
-    // Pas de token ou expiré → login OAuth
-    // Sauvegarder le lead_id pour après le callback
-    localStorage.setItem('pending_lead_id', leadId);
-    window.location.href = 'https://accounts.zoho.eu/oauth/v2/auth' +
-      '?response_type=code' +
-      '&client_id=' + CLIENT_ID +
-      '&scope=' + encodeURIComponent(SCOPE) +
-      '&redirect_uri=' + encodeURIComponent(REDIRECT_URI) +
-      '&access_type=offline' +
-      '&prompt=consent';
+  accessToken = await getAccessToken();
+  if (!accessToken) {
+    showError('Impossible d\'obtenir un token Zoho. Contactez votre administrateur.');
     return;
   }
 
-  // Token OK → charger les dispos
   moisCourant = new Date();
   moisCourant.setDate(1);
   chargerDisponibilites();
 };
+
+// ── REFRESH TOKEN → ACCESS TOKEN ─────────────────────────────────
+async function getAccessToken() {
+  const cached = localStorage.getItem('zoho_access_token');
+  const expiry = parseInt(localStorage.getItem('zoho_token_expiry') || 0);
+  if (cached && Date.now() < expiry) return cached;
+
+  try {
+    const resp = await fetch(ZOHO_ACCOUNTS + '/oauth/v2/token', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({
+        refresh_token: REFRESH_TOKEN,
+        client_id:     CLIENT_ID,
+        client_secret: CLIENT_SECRET,
+        grant_type:    'refresh_token'
+      })
+    });
+    const data = await resp.json();
+    if (data.access_token) {
+      localStorage.setItem('zoho_access_token', data.access_token);
+      localStorage.setItem('zoho_token_expiry', Date.now() + 55 * 60 * 1000);
+      return data.access_token;
+    }
+    console.error('Token error:', JSON.stringify(data));
+    return null;
+  } catch(e) {
+    console.error('Fetch token error:', e.message);
+    return null;
+  }
+}
 
 // ── APPEL FONCTION DELUGE ────────────────────────────────────────
 async function chargerDisponibilites() {
