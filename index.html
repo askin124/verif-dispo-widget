@@ -271,15 +271,10 @@ async function getAccessToken() {
 // ── APPEL FONCTION DELUGE ────────────────────────────────────────
 async function chargerDisponibilites() {
   try {
-    const resp = await fetch(ZOHO_BASE + '/functions/verid_dispo/actions/execute?auth_type=oauth', {
+    const resp = await fetch(TOKEN_PROXY + '/function', {
       method: 'POST',
-      headers: {
-        'Authorization': 'Zoho-oauthtoken ' + accessToken,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        arguments: JSON.stringify({ lead_id: leadId })
-      })
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ access_token: accessToken, lead_id: leadId })
     });
 
     const json = await resp.json();
@@ -428,19 +423,10 @@ async function validerCreneau() {
   document.getElementById('btn-valider').textContent = 'Enregistrement…';
 
   try {
-    const resp = await fetch(ZOHO_BASE + '/Leads', {
-      method: 'PUT',
-      headers: {
-        'Authorization': 'Zoho-oauthtoken ' + accessToken,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        data: [{
-          id: leadId,
-          Date_du_rendez_vous: selectedDate,
-          Cr_neau_horaire: selectedHeure
-        }]
-      })
+    const resp = await fetch(TOKEN_PROXY + '/update', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ access_token: accessToken, lead_id: leadId, date: selectedDate, heure: selectedHeure })
     });
 
     const json = await resp.json();
