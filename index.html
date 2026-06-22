@@ -8,35 +8,23 @@
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
     font-family: 'Segoe UI', Arial, sans-serif;
-    background: #f8fafc;
-    color: #1e293b;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
+    background: #f8fafc; color: #1e293b;
+    min-height: 100vh; display: flex; flex-direction: column;
   }
   .header {
-    background: #fff;
-    border-bottom: 1px solid #e2e8f0;
-    padding: 12px 16px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    flex-shrink: 0;
+    background: #fff; border-bottom: 1px solid #e2e8f0;
+    padding: 12px 16px; display: flex; align-items: center; gap: 10px; flex-shrink: 0;
   }
   .header-dot { width: 8px; height: 8px; border-radius: 50%; background: #16a34a; }
   .header h1 { font-size: 14px; font-weight: 600; }
   .header-badges { margin-left: auto; display: flex; gap: 6px; }
   .badge { font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 20px; background: #dcfce7; color: #15803d; }
   .badge.blue { background: #dbeafe; color: #1d4ed8; }
+  .badge.orange { background: #ffedd5; color: #c2410c; }
 
   .nav-mois {
-    background: #fff;
-    border-bottom: 1px solid #e2e8f0;
-    padding: 8px 16px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-shrink: 0;
+    background: #fff; border-bottom: 1px solid #e2e8f0;
+    padding: 8px 16px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0;
   }
   .nav-mois button {
     background: none; border: 1px solid #e2e8f0; border-radius: 6px;
@@ -46,14 +34,11 @@
   .nav-mois h2 { font-size: 14px; font-weight: 600; color: #1e293b; text-transform: capitalize; }
 
   .cal-wrapper { flex: 1; overflow-y: auto; padding: 12px 16px; }
-
   .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; }
-
   .cal-header-cell {
     text-align: center; font-size: 11px; font-weight: 700;
     color: #94a3b8; padding: 4px 0 8px; letter-spacing: 0.5px; text-transform: uppercase;
   }
-
   .cal-day {
     min-height: 72px; border-radius: 8px; padding: 6px;
     background: #fff; border: 1px solid #f1f5f9;
@@ -65,17 +50,14 @@
   .cal-day.has-dispo { background: #fff; border-color: #bbf7d0; }
   .cal-day.has-dispo:hover { border-color: #16a34a; box-shadow: 0 2px 8px rgba(22,163,74,0.12); }
   .cal-day.today .day-num {
-    background: #16a34a; color: #fff;
-    width: 22px; height: 22px; border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
+    background: #16a34a; color: #fff; width: 22px; height: 22px;
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
   }
-
   .day-num {
     font-size: 12px; font-weight: 600; color: #475569;
     margin-bottom: 4px; width: 22px; height: 22px;
     display: flex; align-items: center; justify-content: center;
   }
-
   .creneau-pill {
     display: block; font-size: 10px; font-weight: 600;
     background: #dcfce7; color: #15803d; border-radius: 4px;
@@ -85,19 +67,42 @@
   .creneau-pill:hover { background: #16a34a; color: #fff; transform: scale(1.03); }
   .creneau-pill.selected { background: #15803d; color: #fff; border-color: #14532d; }
 
+  /* Écran de sélection type RDV */
+  .type-screen {
+    display: flex; flex-direction: column; align-items: center;
+    justify-content: center; flex: 1; padding: 30px 20px; gap: 16px;
+  }
+  .type-screen h2 { font-size: 16px; font-weight: 700; color: #1e293b; }
+  .type-screen p { font-size: 13px; color: #64748b; text-align: center; }
+  .type-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; max-width: 340px; }
+  .type-btn {
+    padding: 16px 12px; border: 2px solid #e2e8f0; border-radius: 10px;
+    background: #fff; cursor: pointer; text-align: center; transition: all 0.15s;
+  }
+  .type-btn:hover { border-color: #16a34a; background: #f0fdf4; }
+  .type-btn.selected { border-color: #16a34a; background: #f0fdf4; }
+  .type-btn .type-icon { font-size: 24px; margin-bottom: 6px; }
+  .type-btn .type-name { font-size: 13px; font-weight: 600; color: #1e293b; }
+  .type-btn .type-duree { font-size: 11px; color: #64748b; margin-top: 2px; }
+  .btn-confirmer-type {
+    width: 100%; max-width: 340px; padding: 13px; background: #16a34a;
+    color: #fff; border: none; border-radius: 8px; font-size: 14px;
+    font-weight: 600; cursor: pointer;
+  }
+  .btn-confirmer-type:disabled { background: #cbd5e1; cursor: not-allowed; }
+
   .loading {
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
-    flex: 1; gap: 14px; padding: 40px;
+    display: flex; flex-direction: column; align-items: center;
+    justify-content: center; flex: 1; gap: 14px; padding: 40px;
   }
   .spinner {
-    width: 36px; height: 36px;
-    border: 3px solid #e2e8f0; border-top-color: #16a34a;
-    border-radius: 50%; animation: spin 0.8s linear infinite;
+    width: 36px; height: 36px; border: 3px solid #e2e8f0;
+    border-top-color: #16a34a; border-radius: 50%; animation: spin 0.8s linear infinite;
   }
   @keyframes spin { to { transform: rotate(360deg); } }
   .loading p { font-size: 13px; color: #64748b; }
 
+  /* Modal */
   .modal-overlay {
     display: none; position: fixed; inset: 0;
     background: rgba(15,23,42,0.5); z-index: 100;
@@ -105,33 +110,31 @@
   }
   .modal-overlay.open { display: flex; }
   .modal {
-    background: #fff; border-radius: 14px;
-    padding: 24px; width: 320px;
+    background: #fff; border-radius: 14px; padding: 24px; width: 320px;
     box-shadow: 0 20px 60px rgba(0,0,0,0.2);
   }
   .modal h3 { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
-  .modal .modal-sub { font-size: 12px; color: #64748b; margin-bottom: 18px; }
+  .modal .modal-sub { font-size: 12px; color: #64748b; margin-bottom: 18px; line-height: 1.5; }
   .modal-creneau {
     background: #f0fdf4; border: 2px solid #16a34a;
-    border-radius: 10px; padding: 14px 16px;
-    margin-bottom: 18px; text-align: center;
+    border-radius: 10px; padding: 14px 16px; margin-bottom: 18px; text-align: center;
   }
-  .modal-creneau .mc-date { font-size: 16px; font-weight: 700; color: #15803d; }
-  .modal-creneau .mc-heure { font-size: 13px; color: #16a34a; margin-top: 2px; }
-  .modal-creneau .mc-duree { font-size: 11px; color: #86efac; margin-top: 4px; }
+  .modal-creneau.modif { background: #fff7ed; border-color: #f97316; }
+  .mc-date { font-size: 16px; font-weight: 700; color: #15803d; }
+  .modal-creneau.modif .mc-date { color: #c2410c; }
+  .mc-heure { font-size: 13px; color: #16a34a; margin-top: 2px; }
+  .modal-creneau.modif .mc-heure { color: #f97316; }
+  .mc-duree { font-size: 11px; color: #86efac; margin-top: 4px; }
   .modal-actions { display: flex; gap: 8px; }
   .btn-annuler {
     flex: 1; padding: 10px; border: 1px solid #e2e8f0;
-    background: #fff; border-radius: 8px; cursor: pointer;
-    font-size: 13px; color: #64748b;
+    background: #fff; border-radius: 8px; cursor: pointer; font-size: 13px; color: #64748b;
   }
-  .btn-annuler:hover { background: #f8fafc; }
   .btn-valider {
-    flex: 2; padding: 10px; border: none;
-    background: #16a34a; color: #fff; border-radius: 8px;
-    cursor: pointer; font-size: 13px; font-weight: 600;
+    flex: 2; padding: 10px; border: none; background: #16a34a;
+    color: #fff; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600;
   }
-  .btn-valider:hover { background: #15803d; }
+  .btn-valider.modif { background: #f97316; }
   .btn-valider:disabled { background: #94a3b8; cursor: not-allowed; }
 
   .footer {
@@ -148,11 +151,12 @@
     margin: 20px; background: #fef2f2; border: 1px solid #fecaca;
     border-radius: 10px; padding: 20px; text-align: center; color: #dc2626; font-size: 13px;
   }
-  .btn-login {
-    margin-top: 12px; padding: 10px 20px; background: #16a34a;
-    color: #fff; border: none; border-radius: 8px; cursor: pointer;
-    font-size: 13px; font-weight: 600;
+  .success-box {
+    background: #f0fdf4; border: 1.5px solid #9ae6b4; border-radius: 10px;
+    padding: 20px; text-align: center; color: #276749; font-size: 13px; line-height: 1.6;
   }
+  .success-box .si { font-size: 32px; margin-bottom: 10px; }
+  .success-box strong { display: block; font-size: 15px; margin-bottom: 4px; }
 </style>
 </head>
 <body>
@@ -163,25 +167,52 @@
   <div class="header-badges">
     <span class="badge" id="badge-type">—</span>
     <span class="badge blue" id="badge-duree">—</span>
+    <span class="badge orange" id="badge-mode" style="display:none">Modification</span>
   </div>
 </div>
 
-<div class="nav-mois">
+<div class="nav-mois" id="nav-mois" style="display:none">
   <button onclick="changerMois(-1)">&#8592;</button>
   <h2 id="nav-titre">—</h2>
   <button onclick="changerMois(1)">&#8594;</button>
 </div>
 
 <div class="cal-wrapper" id="cal-wrapper">
-  <div class="loading">
-    <div class="spinner"></div>
-    <p>Initialisation…</p>
+  <!-- Écran 1 : sélection type RDV -->
+  <div class="type-screen" id="type-screen">
+    <h2>Type de rendez-vous</h2>
+    <p>Sélectionnez le type de RDV à positionner</p>
+    <div class="type-grid">
+      <div class="type-btn" id="btn-ISO" onclick="selectType('ISO',60)">
+        <div class="type-icon">🏠</div>
+        <div class="type-name">ISO</div>
+        <div class="type-duree">60 min</div>
+      </div>
+      <div class="type-btn" id="btn-ITE" onclick="selectType('ITE',90)">
+        <div class="type-icon">🧱</div>
+        <div class="type-name">ITE</div>
+        <div class="type-duree">90 min</div>
+      </div>
+      <div class="type-btn" id="btn-Toiture" onclick="selectType('Toiture',90)">
+        <div class="type-icon">🏗️</div>
+        <div class="type-name">Toiture</div>
+        <div class="type-duree">90 min</div>
+      </div>
+      <div class="type-btn" id="btn-Autre" onclick="selectType('Autre',60)">
+        <div class="type-icon">📋</div>
+        <div class="type-name">Autre</div>
+        <div class="type-duree">60 min</div>
+      </div>
+    </div>
+    <button class="btn-confirmer-type" id="btn-confirmer-type" disabled onclick="confirmerType()">
+      Voir les disponibilités
+    </button>
   </div>
 </div>
 
 <div class="footer">
-  <div class="footer-info" id="footer-info">Chargement…</div>
-  <div class="legend">
+  <div class="footer-info" id="footer-info"></div>
+  <div class="legend" id="legend" style="display:none">
     <div class="legend-item"><div class="legend-dot" style="background:#dcfce7;border:1px solid #86efac"></div> Dispo</div>
     <div class="legend-item"><div class="legend-dot" style="background:#f1f5f9"></div> Indispo</div>
   </div>
@@ -189,66 +220,72 @@
 
 <div class="modal-overlay" id="modal">
   <div class="modal">
-    <h3>Confirmer ce créneau ?</h3>
-    <p class="modal-sub">Les champs Date et Heure du lead seront préremplis.</p>
-    <div class="modal-creneau">
+    <h3 id="modal-titre">Confirmer ce créneau ?</h3>
+    <p class="modal-sub" id="modal-sub">Les champs Date et Heure du lead seront préremplis.</p>
+    <div class="modal-creneau" id="modal-creneau">
       <div class="mc-date" id="modal-date">—</div>
       <div class="mc-heure" id="modal-heure">—</div>
       <div class="mc-duree" id="modal-duree">—</div>
     </div>
     <div class="modal-actions">
       <button class="btn-annuler" onclick="fermerModal()">Annuler</button>
-      <button class="btn-valider" id="btn-valider" onclick="validerCreneau()">Valider et préremplir</button>
+      <button class="btn-valider" id="btn-valider" onclick="validerCreneau()">Valider et créer RDV</button>
     </div>
   </div>
 </div>
 
 <script>
-const CLIENT_ID     = '1000.2Z0UCDAXA9XLS30MHACJMSQAUH5EUJ';
-const CLIENT_SECRET = '6e68128e56497ff70c4063a7fa1b862cee13db2c10';
-const REFRESH_TOKEN = '1000.d1a6ca691c6d1139527925c7ea009121.eb3a6b2b61656d8bd816c4a51a5e88c8';
-const ZOHO_BASE     = 'https://www.zohoapis.eu/crm/v8';
-const TOKEN_PROXY   = 'https://zoho-token-proxy.olivierdubost.workers.dev';
+const TOKEN_PROXY = 'https://zoho-token-proxy.olivierdubost.workers.dev';
+const MOIS_FR    = ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
+const JOURS_FR   = ['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'];
 
-let leadId        = null;
-let accessToken   = null;
+let leadId         = null;
+let accessToken    = null;
 let disponibilites = {};
-let dureeRdv      = 60;
-let typeRdv       = '';
-let moisCourant   = new Date();
-let selectedDate  = null;
-let selectedHeure = null;
+let dureeRdv       = 60;
+let typeRdv        = '';
+let moisCourant    = new Date();
+let selectedDate   = null;
+let selectedHeure  = null;
+let modeModif      = false;
 
-const MOIS_FR = ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
-const JOURS_FR = ['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'];
-
-// ── INIT ────────────────────────────────────────────────────────
+// ── INIT ──────────────────────────────────────────────────────────
 window.onload = async function() {
   const params = new URLSearchParams(window.location.search);
   leadId = params.get('lead_id');
-
-  if (!leadId) {
-    showError('Aucun lead_id fourni. Ouvrez ce widget depuis un lead Zoho CRM.');
-    return;
-  }
+  if (!leadId) { showError('Aucun lead_id fourni.'); return; }
 
   accessToken = await getAccessToken();
-  if (!accessToken) {
-    showError('Impossible d\'obtenir un token Zoho. Contactez votre administrateur.');
-    return;
+  if (!accessToken) { showError('Impossible d\'obtenir un token Zoho.'); return; }
+
+  // Vérifier si le lead a déjà un ID google event → mode modification
+  const leadResp = await fetch(TOKEN_PROXY, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ action: 'get_lead', lead_id: leadId, access_token: accessToken })
+  });
+  const leadJson = await leadResp.json();
+  const leadData = leadJson.details && leadJson.details.output ? JSON.parse(leadJson.details.output) : null;
+
+  if (leadData && leadData.id_google_event) {
+    modeModif = true;
+    document.getElementById('badge-mode').style.display = 'inline';
+    document.getElementById('modal-titre').textContent   = 'Modifier ce créneau ?';
+    document.getElementById('modal-sub').textContent     = 'Le RDV Google Calendar existant sera modifié.';
+    document.getElementById('modal-creneau').classList.add('modif');
+    document.getElementById('btn-valider').classList.add('modif');
+    document.getElementById('btn-valider').textContent   = 'Modifier le RDV';
   }
 
-  moisCourant = new Date();
-  moisCourant.setDate(1);
-  chargerDisponibilites();
+  // Afficher l'écran de sélection du type RDV
+  document.getElementById('type-screen').style.display = 'flex';
 };
 
-// ── REFRESH TOKEN → ACCESS TOKEN ─────────────────────────────────
+// ── TOKEN ──────────────────────────────────────────────────────────
 async function getAccessToken() {
   const cached = localStorage.getItem('zoho_access_token');
-  const expiry = parseInt(localStorage.getItem('zoho_token_expiry') || 0);
+  const expiry  = parseInt(localStorage.getItem('zoho_token_expiry') || 0);
   if (cached && Date.now() < expiry) return cached;
-
   try {
     const resp = await fetch(TOKEN_PROXY, {
       method: 'POST',
@@ -261,74 +298,59 @@ async function getAccessToken() {
       localStorage.setItem('zoho_token_expiry', Date.now() + 55 * 60 * 1000);
       return data.access_token;
     }
-    console.error('Token error:', JSON.stringify(data));
     return null;
-  } catch(e) {
-    console.error('Fetch token error:', e.message);
-    return null;
-  }
+  } catch(e) { return null; }
 }
 
-// ── APPEL FONCTION DELUGE ────────────────────────────────────────
+// ── SÉLECTION TYPE RDV ────────────────────────────────────────────
+function selectType(type, duree) {
+  typeRdv  = type;
+  dureeRdv = duree;
+  document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('selected'));
+  document.getElementById('btn-' + type).classList.add('selected');
+  document.getElementById('btn-confirmer-type').disabled = false;
+  document.getElementById('badge-type').textContent  = type;
+  document.getElementById('badge-duree').textContent = duree + ' min';
+}
+
+function confirmerType() {
+  document.getElementById('type-screen').style.display  = 'none';
+  document.getElementById('nav-mois').style.display     = 'flex';
+  document.getElementById('legend').style.display       = 'flex';
+  document.getElementById('cal-wrapper').innerHTML      = '<div class="loading"><div class="spinner"></div><p>Analyse des agendas en cours…</p></div>';
+  moisCourant = new Date(); moisCourant.setDate(1);
+  chargerDisponibilites();
+}
+
+// ── CHARGEMENT DISPOS ─────────────────────────────────────────────
 async function chargerDisponibilites() {
   try {
     const resp = await fetch(TOKEN_PROXY, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action: 'function', access_token: accessToken, lead_id: leadId })
+      body: JSON.stringify({ action: 'function', access_token: accessToken, lead_id: leadId, type_rdv: typeRdv })
     });
-
-    const json = await resp.json();
-    console.log('RAW response:', JSON.stringify(json));
-    let data = null;
-
-    try {
-      // Zoho Functions REST API retourne dans details.output ou code.details.output
-      let output = null;
-      if (json.details && json.details.output)        output = json.details.output;
-      else if (json.code && json.code.details && json.code.details.output) output = json.code.details.output;
-      else if (json.output)                           output = json.output;
-      else                                            output = json;
-
-      data = typeof output === 'string' ? JSON.parse(output) : output;
-    } catch(e) {
-      showError('Réponse invalide : ' + JSON.stringify(json).substring(0, 200));
-      return;
-    }
+    const json   = await resp.json();
+    const output = json.details && json.details.output ? json.details.output : null;
+    const data   = output ? JSON.parse(output) : null;
 
     if (!data || data.status !== 'ok') {
-      showError((data && data.message) ? data.message : 'Erreur : ' + JSON.stringify(data).substring(0, 200));
+      showError(data ? data.message : 'Erreur inconnue.');
       return;
     }
 
-    dureeRdv = data.duree;
-    typeRdv  = data.type_rdv;
     disponibilites = {};
     data.jours.forEach(j => { disponibilites[j.date] = j.creneaux; });
-
-    document.getElementById('badge-type').textContent  = typeRdv;
-    document.getElementById('badge-duree').textContent = dureeRdv + ' min';
-
     renderCalendrier();
-
   } catch(e) {
-    // Token peut-être expiré → relancer OAuth
-    localStorage.removeItem('zoho_access_token');
-    localStorage.setItem('pending_lead_id', leadId);
-    showError('Session expirée. <button class="btn-login" onclick="relancerOAuth()">Se reconnecter</button>');
+    showError('Erreur lors du chargement : ' + e.message);
   }
 }
 
-function relancerOAuth() {
-  localStorage.removeItem('zoho_access_token');
-  window.location.reload();
-}
-
-// ── CALENDRIER ───────────────────────────────────────────────────
+// ── CALENDRIER ────────────────────────────────────────────────────
 function renderCalendrier() {
-  const annee = moisCourant.getFullYear();
-  const mois  = moisCourant.getMonth();
-
+  const annee   = moisCourant.getFullYear();
+  const mois    = moisCourant.getMonth();
   document.getElementById('nav-titre').textContent = MOIS_FR[mois] + ' ' + annee;
 
   const premier = new Date(annee, mois, 1);
@@ -351,10 +373,7 @@ function renderCalendrier() {
   ['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'].forEach(j => {
     html += '<div class="cal-header-cell">' + j + '</div>';
   });
-
-  for (let i = 0; i < depart; i++) {
-    html += '<div class="cal-day autre-mois"></div>';
-  }
+  for (let i = 0; i < depart; i++) html += '<div class="cal-day autre-mois"></div>';
 
   for (let d = 1; d <= dernier.getDate(); d++) {
     const dt      = new Date(annee, mois, d);
@@ -362,33 +381,27 @@ function renderCalendrier() {
     const dateStr = annee + '-' + String(mois+1).padStart(2,'0') + '-' + String(d).padStart(2,'0');
     const isToday   = dt.getTime() === today.getTime();
     const isPasse   = dt < today;
-    const isWeekend = dow === 0 || dow === 6;
     const isOuvre   = dow >= 1 && dow <= 4;
     const creneaux  = disponibilites[dateStr] || [];
     const hasDispo  = creneaux.length > 0 && !isPasse && isOuvre;
 
     let classes = 'cal-day';
-    if (isWeekend || !isOuvre) classes += ' weekend';
-    if (hasDispo)  classes += ' has-dispo';
-    if (isToday)   classes += ' today';
+    if (!isOuvre) classes += ' weekend';
+    if (hasDispo) classes += ' has-dispo';
+    if (isToday)  classes += ' today';
 
-    html += '<div class="' + classes + '">';
-    html += '<div class="day-num">' + d + '</div>';
-
+    html += '<div class="' + classes + '"><div class="day-num">' + d + '</div>';
     if (hasDispo) {
       creneaux.forEach(h => {
         const isSel = selectedDate === dateStr && selectedHeure === h;
-        html += '<span class="creneau-pill' + (isSel ? ' selected' : '') + '" ' +
-                'onclick="ouvrirModal(\'' + dateStr + '\',\'' + h + '\')">' + h + '</span>';
+        html += '<span class="creneau-pill' + (isSel ? ' selected' : '') + '" onclick="ouvrirModal(\'' + dateStr + '\',\'' + h + '\')">' + h + '</span>';
       });
     }
     html += '</div>';
   }
 
   const restant = (7 - (depart + dernier.getDate()) % 7) % 7;
-  for (let i = 0; i < restant; i++) {
-    html += '<div class="cal-day autre-mois"></div>';
-  }
+  for (let i = 0; i < restant; i++) html += '<div class="cal-day autre-mois"></div>';
   html += '</div>';
   document.getElementById('cal-wrapper').innerHTML = html;
 }
@@ -398,81 +411,80 @@ function changerMois(dir) {
   renderCalendrier();
 }
 
-// ── MODAL ────────────────────────────────────────────────────────
+// ── MODAL ─────────────────────────────────────────────────────────
 function ouvrirModal(dateStr, heure) {
   selectedDate  = dateStr;
   selectedHeure = heure;
-
-  const dt     = new Date(dateStr + 'T00:00:00');
+  const dt      = new Date(dateStr + 'T00:00:00');
   const dateAff = JOURS_FR[dt.getDay()] + ' ' + dt.getDate() + ' ' + MOIS_FR[dt.getMonth()] + ' ' + dt.getFullYear();
-
-  const [h, m] = heure.split(':').map(Number);
+  const [h, m]  = heure.split(':').map(Number);
   const finMin  = h * 60 + m + dureeRdv;
-  const heureFin = String(Math.floor(finMin/60)).padStart(2,'0') + ':' + String(finMin%60).padStart(2,'0');
-
+  const hFin    = String(Math.floor(finMin/60)).padStart(2,'0') + ':' + String(finMin%60).padStart(2,'0');
   document.getElementById('modal-date').textContent  = dateAff;
-  document.getElementById('modal-heure').textContent = heure + ' → ' + heureFin;
+  document.getElementById('modal-heure').textContent = heure + ' → ' + hFin;
   document.getElementById('modal-duree').textContent = typeRdv + ' · ' + dureeRdv + ' min';
   document.getElementById('btn-valider').disabled    = false;
-  document.getElementById('btn-valider').textContent = 'Valider et préremplir';
   document.getElementById('modal').classList.add('open');
 }
 
-function fermerModal() {
-  document.getElementById('modal').classList.remove('open');
-}
+function fermerModal() { document.getElementById('modal').classList.remove('open'); }
 
-// ── VALIDATION ───────────────────────────────────────────────────
+// ── VALIDATION ────────────────────────────────────────────────────
 async function validerCreneau() {
   if (!selectedDate || !selectedHeure) return;
-
-  document.getElementById('btn-valider').disabled    = true;
-  document.getElementById('btn-valider').textContent = 'Enregistrement…';
+  const btn = document.getElementById('btn-valider');
+  btn.disabled = true;
+  btn.textContent = 'Enregistrement…';
 
   try {
-    const resp = await fetch(TOKEN_PROXY, {
+    // 1. Préremplir date/heure dans le lead
+    const respUpdate = await fetch(TOKEN_PROXY, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action: 'update', access_token: accessToken, lead_id: leadId, date: selectedDate, heure: selectedHeure })
+      body: JSON.stringify({
+        action: 'update', access_token: accessToken,
+        lead_id: leadId, date: selectedDate, heure: selectedHeure
+      })
     });
+    const jsonUpdate = await respUpdate.json();
+    console.log('Update:', JSON.stringify(jsonUpdate));
 
-    const json = await resp.json();
-    console.log('Update response:', JSON.stringify(json));
-    // Zoho v7 retourne data[0].status === 'success' ou code === 'SUCCESS'
-    const updateOk = (json.data && json.data[0] && json.data[0].status === 'success') ||
-                     (json.code === 'SUCCESS') ||
-                     (json.data && json.data[0] && json.data[0].code === 'SUCCESS');
-    if (updateOk) {
-      document.getElementById('btn-valider').textContent = 'Création du RDV…';
+    // 2. Créer ou modifier le RDV Google Calendar
+    btn.textContent = modeModif ? 'Modification RDV…' : 'Création RDV…';
+    const actionRdv = modeModif ? 'modif_rdv' : 'create_rdv';
+    const respRdv   = await fetch(TOKEN_PROXY, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: actionRdv, access_token: accessToken, lead_id: leadId })
+    });
+    const jsonRdv = await respRdv.json();
+    const output  = jsonRdv.details && jsonRdv.details.output ? jsonRdv.details.output : '';
+    console.log('RDV output:', output);
 
-      // Enchaîner avec la création du RDV Google Calendar
-      const respRdv = await fetch(TOKEN_PROXY, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'create_rdv', access_token: accessToken, lead_id: leadId })
-      });
-      const jsonRdv = await respRdv.json();
-      const output  = jsonRdv.details && jsonRdv.details.output ? jsonRdv.details.output : '';
-
-      if (output.includes('créé') || output.includes('Bonne journée')) {
-        document.getElementById('btn-valider').textContent = '✓ RDV créé !';
-        document.getElementById('btn-valider').style.background = '#15803d';
-        document.getElementById('modal-sub').textContent = output;
-        setTimeout(() => { fermerModal(); window.close(); }, 2500);
-      } else {
-        // Erreur métier retournée par la fonction (doublon, champ manquant, etc.)
-        document.getElementById('btn-valider').disabled    = false;
-        document.getElementById('btn-valider').textContent = 'Valider et préremplir';
-        document.getElementById('modal-sub').textContent   = output || 'Erreur lors de la création du RDV.';
-        document.getElementById('modal-sub').style.color   = '#dc2626';
-      }
+    // Succès si pas de message d'erreur connu
+    const isError = output.includes('erreur') || output.includes('Veuillez') || output.includes('n\'a pas pu');
+    if (isError) {
+      document.getElementById('modal-sub').textContent = output;
+      document.getElementById('modal-sub').style.color = '#dc2626';
+      btn.disabled    = false;
+      btn.textContent = 'Réessayer';
     } else {
-      throw new Error('Update failed');
+      document.getElementById('cal-wrapper').innerHTML = `
+        <div style="padding:30px">
+          <div class="success-box">
+            <div class="si">✓</div>
+            <strong>${modeModif ? 'RDV modifié !' : 'RDV créé !'}</strong>
+            ${selectedDate} à ${selectedHeure}<br>
+            <small>${output || 'Bonne journée !'}</small>
+          </div>
+        </div>`;
+      fermerModal();
     }
   } catch(e) {
-    document.getElementById('btn-valider').disabled    = false;
-    document.getElementById('btn-valider').textContent = 'Réessayer';
-    alert('Erreur lors de la mise à jour. Vérifiez vos permissions.');
+    btn.disabled    = false;
+    btn.textContent = 'Réessayer';
+    document.getElementById('modal-sub').textContent = 'Erreur : ' + e.message;
+    document.getElementById('modal-sub').style.color = '#dc2626';
   }
 }
 
