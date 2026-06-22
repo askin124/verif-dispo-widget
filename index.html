@@ -437,7 +437,12 @@ async function validerCreneau() {
     });
 
     const json = await resp.json();
-    if (json.data && json.data[0] && json.data[0].status === 'success') {
+    console.log('Update response:', JSON.stringify(json));
+    // Zoho v7 retourne data[0].status === 'success' ou code === 'SUCCESS'
+    const updateOk = (json.data && json.data[0] && json.data[0].status === 'success') ||
+                     (json.code === 'SUCCESS') ||
+                     (json.data && json.data[0] && json.data[0].code === 'SUCCESS');
+    if (updateOk) {
       document.getElementById('btn-valider').textContent = 'Création du RDV…';
 
       // Enchaîner avec la création du RDV Google Calendar
