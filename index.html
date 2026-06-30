@@ -243,6 +243,7 @@ let leadId         = null;
 let accessToken    = null;
 let disponibilites = {};
 let dataPlanningComplet = [];
+let zonesOuvertes = {};
 let dureeRdv       = 60;
 let typeRdv        = '';
 let moisCourant    = new Date();
@@ -340,43 +341,35 @@ async function chargerDisponibilites() {
       return;
     }
 
-    dataPlanningComplet = data.jours_complet || [];
+    disponibilites = {};
+    zonesOuvertes  = {};
+    data.jours.forEach(j => {
+      disponibilites[j.date] = j.creneaux;
+      zonesOuvertes[j.date]  = j.zone_ouverte;
+    });
 
-    if (data.planning_requis) {
-      showOuvrirPlanning(data.zone_prospect);
+    if (!data.au_moins_un_jour_ouvert) {
+      showAucuneZoneOuverte(data.zone_prospect);
       return;
     }
 
-    disponibilites = {};
-    data.jours.forEach(j => { disponibilites[j.date] = j.creneaux; });
     renderCalendrier();
   } catch(e) {
     showError('Erreur lors du chargement : ' + e.message);
   }
 }
 
-function showOuvrirPlanning(zone) {
+function showAucuneZoneOuverte(zone) {
   document.getElementById('nav-mois').style.display = 'none';
   document.getElementById('legend').style.display    = 'none';
   document.getElementById('cal-wrapper').innerHTML = `
     <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;padding:40px 20px;gap:14px;text-align:center;">
-      <div style="font-size:32px;">📅</div>
-      <h3 style="font-size:15px;font-weight:700;color:#1e293b;">Aucun RDV dans cette zone (${zone})</h3>
+      <div style="font-size:32px;">⚠️</div>
+      <h3 style="font-size:15px;font-weight:700;color:#1e293b;">Aucune zone ouverte (${zone})</h3>
       <p style="font-size:13px;color:#64748b;max-width:280px;">
-        Il n'y a pas encore de rendez-vous planifié dans cette zone sur la période. Ouvrez le planning complet pour voir toutes les disponibilités.
+        Il n'y a pas de rendez-vous existant dans cette zone sur la période recherchée. Merci de vérifier visuellement sur l'agenda Google avant de positionner un RDV.
       </p>
-      <button onclick="ouvrirPlanningComplet()" style="margin-top:8px;padding:12px 24px;background:#16a34a;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;">
-        Ouvrir le planning
-      </button>
     </div>`;
-}
-
-function ouvrirPlanningComplet() {
-  document.getElementById('nav-mois').style.display = 'flex';
-  document.getElementById('legend').style.display    = 'flex';
-  disponibilites = {};
-  dataPlanningComplet.forEach(j => { disponibilites[j.date] = j.creneaux; });
-  renderCalendrier();
 }
 
 // ── CALENDRIER ────────────────────────────────────────────────────
@@ -411,11 +404,13 @@ function renderCalendrier() {
     const dt      = new Date(annee, mois, d);
     const dow     = dt.getDay();
     const dateStr = annee + '-' + String(mois+1).padStart(2,'0') + '-' + String(d).padStart(2,'0');
-    const isToday   = dt.getTime() === today.getTime();
-    const isPasse   = dt < today;
-    const isOuvre   = dow >= 1 && dow <= 4;
-    const creneaux  = disponibilites[dateStr] || [];
-    const hasDispo  = creneaux.length > 0 && !isPasse && isOuvre;
+    const isToday     = dt.getTime() === today.getTime();
+    const isPasse     = dt < today;
+    const isOuvre     = dow >= 1 && dow <= 4;
+    const creneaux    = disponibilites[dateStr] || [];
+    const zoneOuverte = zonesOuvertes[dateStr];
+    const hasDispo    = creneaux.length > 0 && !isPasse && isOuvre;
+    const zoneFermee  = isOuvre && !isPasse && zoneOuverte === false;
 
     let classes = 'cal-day';
     if (!isOuvre) classes += ' weekend';
@@ -428,6 +423,8 @@ function renderCalendrier() {
         const isSel = selectedDate === dateStr && selectedHeure === h;
         html += '<span class="creneau-pill' + (isSel ? ' selected' : '') + '" onclick="ouvrirModal(\'' + dateStr + '\',\'' + h + '\')">' + h + '</span>';
       });
+    } else if (zoneFermee) {
+      html += '<div style="font-size:9px;color:#cbd5e1;text-align:center;margin-top:8px;">zone fermée</div>';
     }
     html += '</div>';
   }
