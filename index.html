@@ -242,6 +242,7 @@ const JOURS_FR   = ['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'];
 let leadId         = null;
 let accessToken    = null;
 let disponibilites = {};
+let dataPlanningComplet = [];
 let dureeRdv       = 60;
 let typeRdv        = '';
 let moisCourant    = new Date();
@@ -339,12 +340,43 @@ async function chargerDisponibilites() {
       return;
     }
 
+    dataPlanningComplet = data.jours_complet || [];
+
+    if (data.planning_requis) {
+      showOuvrirPlanning(data.zone_prospect);
+      return;
+    }
+
     disponibilites = {};
     data.jours.forEach(j => { disponibilites[j.date] = j.creneaux; });
     renderCalendrier();
   } catch(e) {
     showError('Erreur lors du chargement : ' + e.message);
   }
+}
+
+function showOuvrirPlanning(zone) {
+  document.getElementById('nav-mois').style.display = 'none';
+  document.getElementById('legend').style.display    = 'none';
+  document.getElementById('cal-wrapper').innerHTML = `
+    <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;padding:40px 20px;gap:14px;text-align:center;">
+      <div style="font-size:32px;">📅</div>
+      <h3 style="font-size:15px;font-weight:700;color:#1e293b;">Aucun RDV dans cette zone (${zone})</h3>
+      <p style="font-size:13px;color:#64748b;max-width:280px;">
+        Il n'y a pas encore de rendez-vous planifié dans cette zone sur la période. Ouvrez le planning complet pour voir toutes les disponibilités.
+      </p>
+      <button onclick="ouvrirPlanningComplet()" style="margin-top:8px;padding:12px 24px;background:#16a34a;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;">
+        Ouvrir le planning
+      </button>
+    </div>`;
+}
+
+function ouvrirPlanningComplet() {
+  document.getElementById('nav-mois').style.display = 'flex';
+  document.getElementById('legend').style.display    = 'flex';
+  disponibilites = {};
+  dataPlanningComplet.forEach(j => { disponibilites[j.date] = j.creneaux; });
+  renderCalendrier();
 }
 
 // ── CALENDRIER ────────────────────────────────────────────────────
